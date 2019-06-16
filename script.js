@@ -3,27 +3,27 @@ if (!db) {
     db = dbStart;
 }
 
-function start() {
-    loadData()
-    setListeners()
+function addLike(id) {
+    let post = findPost(id);
+    post.likes++;
+    updatePost(id, post);
+
+    let like = document.getElementById("likes_" + id);
+    like.innerText = post.likes;
 }
 
-function setListeners() {
-    let test = document.querySelectorAll("#test");
 
-    test.forEach(item => {
-        // This handler will be executed only once when the cursor
-// moves over the unordered list
-        item.addEventListener("mouseenter", function (event) {
-            // highlight the mouseenter target
-            event.target.style.color = "purple";
+function updatePost(id, post) {
+    db.find((item, index, array) => {
+        if (item.id == id)
+            array[index] = post;
+    });
 
-            // reset the color after a short delay
-            setTimeout(function () {
-                event.target.style.color = "";
-            }, 500);
-        }, false);
-    })
+    localStorage.setItem("db", JSON.stringify(db));
+}
+
+function findPost(id) {
+    return db.find(item => item.id == id);
 }
 
 function loadData() {
@@ -39,39 +39,45 @@ function loadData() {
                 <div class="card-content">
                     <span class="card-title activator grey-text text-darken-4">
                         <div class="col s10">
-                            <i class="material-icons left">calendar_today</i><h6>${formatDate(db[i].date)}</h6>
+                            <i class="material-icons left activator">calendar_today</i>
+                            <h6 class="activator">${formatDate(db[i].date)}</h6>
                         </div>
                         <div class="col s2">
                             <i class="material-icons right">more_vert</i>
                         </div>
-                        <div class="col s12">
+                        <div class="col s12 activator">
                             ${db[i].title}
                         </div>
                     </span>
                 </div>
                 <div class="card-action">
-                <!-- Bigger Screens -->
-                        <div class="col s12">                   
-
-                        </div>
-                    <div class="col s3">
-                        <button class="waves-effect waves-light btn indigo" id="test">
-                            <i class="material-icons">thumb_up</i>
+                    <div class="col s6">
+                        <button class="waves-effect waves-light btn indigo right" onclick="addLike(${db[i].id})">
+                            <i class="material-icons">thumb_up</i><span id="likes_${db[i].id}">${db[i].likes}</span>
                         </button>
                     </div>
-                    <div class="col s3">
+                    <div class="col s6">
                         <button class="waves-effect waves-light btn indigo">
-                            <i class="material-icons">speaker_notes</i>
+                            <i class="material-icons">speaker_notes</i>${db[i].comments.length}
                         </button>
                     </div>
-
-                <!-- Lower Screens -->
                 </div>
                 <div class="card-reveal">
                     <span class="card-title grey-text text-darken-4">
-                        <i class="material-icons right">close</i>
+                        <div class="col s10">
+                            <i class="material-icons left">calendar_today</i>
+                            <h6>${formatDate(db[i].date)}</h6>
+                        </div>
+                        <div class="col s2">
+                            <i class="material-icons right">close</i>
+                        </div>
+                        <div class="col s12">
+                            ${db[i].title}
+                        </div>
                     </span>
-                    <p>${db[i].text}</p>
+                    <div class="col s12">
+                        <p>${db[i].text}</p>
+                    </div>
                 </div>
             </div>
         </div>`;
