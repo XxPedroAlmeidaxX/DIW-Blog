@@ -10,3 +10,45 @@ p {
     width: 100%;
     word-break: break-word;
 }
+
+/* label color */
+.input-field label {
+    color: #3f51b5 !important;
+}
+
+/* label focus color */
+.input-field input[type=text]:focus + label {
+    color: #3f51b5 !important;
+}
+
+/* label underline focus color */
+.input-field input[type=text]:focus {
+    border-bottom: 1px solid #3f51b5 !important;
+    box-shadow: 0 1px 0 0 #3f51b5 !important;
+}
+
+/* valid color */
+.input-field input[type=text].valid {
+    border-bottom: 1px solid #3f51b5 !important;
+    box-shadow: 0 1px 0 0 #3f51b5 !important;
+}
+
+/* invalid color */
+.input-field input[type=text].invalid {
+    border-bottom: 1px solid #3f51b5 !important;
+    box-shadow: 0 1px 0 0 #3f51b5 !important;
+}
+
+/* icon prefix focus color */
+.input-field .prefix.active {
+    color: #3f51b5 !important;
+}
+
+.input-field textarea:focus + label {
+    color: #3f51b5 !important;
+}
+
+.row .input-field textarea:focus {
+    border-bottom: 1px solid #3f51b5 !important;
+    box-shadow: 0 1px 0 0 #3f51b5 !important
+}
