@@ -38,10 +38,22 @@ function loadData() {
                 </div>
                 <div class="card-content">
                     <span class="card-title activator grey-text text-darken-4">
-                        <i class="material-icons right">more_vert</i></br>${db[i].title}
+                        <div class="col s10">
+                            <i class="material-icons left">calendar_today</i><h6>${formatDate(db[i].date)}</h6>
+                        </div>
+                        <div class="col s2">
+                            <i class="material-icons right">more_vert</i>
+                        </div>
+                        <div class="col s12">
+                            ${db[i].title}
+                        </div>
                     </span>
                 </div>
                 <div class="card-action">
+                <!-- Bigger Screens -->
+                        <div class="col s12">                   
+
+                        </div>
                     <div class="col s3">
                         <button class="waves-effect waves-light btn indigo" id="test">
                             <i class="material-icons">thumb_up</i>
@@ -52,13 +64,8 @@ function loadData() {
                             <i class="material-icons">speaker_notes</i>
                         </button>
                     </div>
-                    <div class="col s6">                   
-                        <div class="right-align">
-                            <button disabled class="btn date">
-                                ${formatDate(db[i].date)}
-                            </button>
-                        </div>
-                    </div>
+
+                <!-- Lower Screens -->
                 </div>
                 <div class="card-reveal">
                     <span class="card-title grey-text text-darken-4">
@@ -79,9 +86,9 @@ function formatDate(date) {
     formattedDate += date.getDate() + "/";
     formattedDate += date.getMonth() + "/";
     formattedDate += date.getFullYear() + " ";
-    // formattedDate += date.getHours() + ":";
-    // formattedDate += date.getMinutes() + ":";
-    // formattedDate += date.getSeconds();
+    formattedDate += date.getHours() + ":";
+    formattedDate += date.getMinutes() + ":";
+    formattedDate += date.getSeconds();
 
     return formattedDate;
 }
