@@ -17,6 +17,12 @@ function addLike(id) {
     like.innerText = post.likes;
 }
 
+function commentaryTrigger(id) {
+    let element = document.querySelectorAll('.modal')[0];
+    let modal = M.Modal.getInstance(element);
+    modal.open();
+}
+
 
 function updatePost(id, post) {
     db.find((item, index, array) => {
@@ -58,12 +64,14 @@ function loadData() {
                 <div class="card-action">
                     <div class="col s6">
                         <button class="waves-effect waves-light btn indigo right" onclick="addLike(${db[i].id})">
-                            <i class="material-icons">thumb_up</i><span id="likes_${db[i].id}">${db[i].likes}</span>
+                            <i class="material-icons">thumb_up</i>
+                            <span id="likes_${db[i].id}">${db[i].likes}</span>
                         </button>
                     </div>
                     <div class="col s6">
-                        <button class="waves-effect waves-light btn indigo">
-                            <i class="material-icons">speaker_notes</i>${db[i].comments.length}
+                        <button class="waves-effect waves-light btn indigo" onclick="commentaryTrigger(${db[i].id})">
+                            <i class="material-icons">speaker_notes</i>
+                            <span id="comments_${db[i].id}">${db[i].comments.length}</span>
                         </button>
                     </div>
                 </div>
