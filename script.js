@@ -13,11 +13,28 @@ function addLike(id) {
     post.likes++;
     updatePost(id, post);
 
-    let like = document.getElementById("likes_" + id);
-    like.innerText = post.likes;
+    document.getElementById("likes_" + id).innerText = post.likes;
 }
 
-function commentaryTrigger(id) {
+function commentsTrigger(id) {
+    let innerHTML = "";
+    let post = findPost(id);
+
+    post.comments.forEach(item => {
+        innerHTML += `
+        <div class="row">
+            <div class="col s12">
+                <div class="card-panel indigo">
+                    <span class="white-text">
+                        ${item.name} <br><br> ${item.text}
+                    </span>
+                </div>
+            </div>
+        </div>`
+    });
+
+    document.getElementById("comModalContent").innerHTML = innerHTML;
+
     let element = document.querySelectorAll('.modal')[0];
     let modal = M.Modal.getInstance(element);
     modal.open();
@@ -37,7 +54,19 @@ function findPost(id) {
     return db.find(item => item.id == id);
 }
 
+function comparePostDate(a, b) {
+    let da = new Date(a.date);
+    let db = new Date(b.date);
+
+    if (da > db)
+        return -1;
+    if (da < db)
+        return 1;
+    return 0;
+}
+
 function loadData() {
+    db.sort(comparePostDate);
     let innerHTML = "";
 
     for (let i = 0; i < db.length; i++) {
@@ -69,7 +98,7 @@ function loadData() {
                         </button>
                     </div>
                     <div class="col s6">
-                        <button class="waves-effect waves-light btn indigo" onclick="commentaryTrigger(${db[i].id})">
+                        <button class="waves-effect waves-light btn indigo" onclick="commentsTrigger(${db[i].id})">
                             <i class="material-icons">speaker_notes</i>
                             <span id="comments_${db[i].id}">${db[i].comments.length}</span>
                         </button>
