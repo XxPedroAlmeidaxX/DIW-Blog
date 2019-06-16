@@ -1,10 +1,19 @@
 // Fake database used trough the code
 let db;
 
+// Stores the modal's post
+let postId;
+
 // Initialize Materialize Modals
 document.addEventListener('DOMContentLoaded', function () {
     let elems = document.querySelectorAll('.modal');
     let instances = M.Modal.init(elems);
+});
+
+// Initialize Materialize Floating button
+document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('.fixed-action-btn');
+    var instances = M.FloatingActionButton.init(elems, options);
 });
 
 // Setup everything to start using the website
@@ -90,7 +99,7 @@ function loadData() {
 function addLike(id) {
     let post = findPost(id);
     post.likes++;
-    updatePost(id, post);
+    updatePost(post);
 
     document.getElementById("likes_" + id).innerText = post.likes;
 }
@@ -106,7 +115,9 @@ function commentsTrigger(id) {
             <div class="col s12">
                 <div class="card-panel indigo">
                     <span class="white-text">
-                        ${item.name} <br><br> ${item.text}
+                        <p>
+                            ${item.name} <br><br> ${item.text}
+                        </p>
                     </span>
                 </div>
             </div>
@@ -114,10 +125,43 @@ function commentsTrigger(id) {
     });
 
     document.getElementById("comModalContent").innerHTML = innerHTML;
+    postId = id;
 
     let element = document.querySelectorAll('.modal')[0];
     let modal = M.Modal.getInstance(element);
     modal.open();
+}
+
+// Clears the Comment's fields
+function clearComment() {
+    let user = document.getElementById("user_name");
+    user.value = '';
+
+    let commentary = document.getElementById("commentary");
+    commentary.value = '';
+}
+
+// Adds a comment to a post
+function addComment() {
+    let post = findPost(postId);
+    let user = document.getElementById("user_name");
+    let commentary = document.getElementById("commentary");
+
+    post.comments.push({"name": user.value, "text": commentary.value});
+    updatePost(post);
+
+    document.getElementById("comments_" + post.id).innerText = post.comments.length;
+
+    document.getElementById("comModalContent").innerHTML += `
+        <div class="row">
+            <div class="col s12">
+                <div class="card-panel indigo">
+                    <span class="white-text">
+                        ${user.value} <br><br> ${commentary.value}
+                    </span>
+                </div>
+            </div>
+        </div>`;
 }
 
 // Sort the posts contained on the fakeDB by Date
@@ -153,9 +197,9 @@ function formatDate(date) {
 //
 
 // Updates a Post Data
-function updatePost(id, post) {
+function updatePost(post) {
     db.find((item, index, array) => {
-        if (item.id == id)
+        if (item.id == post.id)
             array[index] = post;
     });
 
