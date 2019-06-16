@@ -1,0 +1,16 @@
+img {
+    max-height: 300px;
+    width: 100%;
+    height: auto;
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+}
+
+p {
+    width: 100%;
+    word-break: break-word;
+}
+
+.btn.date {
+    color: black !important;
+}
