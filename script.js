@@ -199,7 +199,7 @@ function formatDate(date) {
     let formattedDate = "";
     date = new Date(date);
     formattedDate += date.getDate() + "/";
-    formattedDate += date.getMonth() + "/";
+    formattedDate += (date.getMonth() + 1) + "/";
     formattedDate += date.getFullYear() + " ";
     formattedDate += date.getHours() + ":";
     formattedDate += date.getMinutes() + ":";
