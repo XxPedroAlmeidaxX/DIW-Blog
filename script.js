@@ -232,7 +232,7 @@ function addPost(title, text, img) {
     let date = new Date();
 
     db.push({
-        "id": Math.random() * 1000000000,
+        "id": Math.floor(Math.random() * 1000000000),
         "date": date.toISOString(),
         "title": title,
         "text": text,
