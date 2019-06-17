@@ -1,8 +1,9 @@
 // Fake database used trough the code
 let db;
-
 // Stores the modal's post
 let postId;
+// Stores the image loaded by the user
+let imgStore;
 
 // Initialize Materialize Modals
 document.addEventListener('DOMContentLoaded', function () {
@@ -10,11 +11,14 @@ document.addEventListener('DOMContentLoaded', function () {
     let instances = M.Modal.init(elems);
 });
 
-// Initialize Materialize Floating button
-document.addEventListener('DOMContentLoaded', function () {
-    var elems = document.querySelectorAll('.fixed-action-btn');
-    var instances = M.FloatingActionButton.init(elems, options);
-});
+// Converts the loaded file into base64 and stores it on imgStore
+document.getElementById("post-image").addEventListener('change', (e) => {
+    let fr = new FileReader();
+    fr.onload = (e) => {
+        imgStore = e.target.result;
+    };
+    fr.readAsDataURL(e.target.files[0]);
+}, false);
 
 // Setup everything to start using the website
 function start() {
@@ -41,7 +45,7 @@ function loadData() {
         <div class="col xl4 m6 s12">
             <div class="card large sticky-action">
                 <div class="card-image waves-effect waves-block waves-light">
-                    <img class="activator" alt="Post Image" src="data:image/png;base64, ${db[i].image}">
+                    <img class="activator" alt="Post Image" src="${db[i].image}">
                 </div>
                 <div class="card-content">
                     <span class="card-title activator grey-text text-darken-4">
@@ -134,11 +138,8 @@ function commentsTrigger(id) {
 
 // Clears the Comment's fields
 function clearComment() {
-    let user = document.getElementById("user_name");
-    user.value = '';
-
-    let commentary = document.getElementById("commentary");
-    commentary.value = '';
+    document.getElementById("user_name").value = '';
+    document.getElementById("commentary").value = '';
 }
 
 // Adds a comment to a post
@@ -162,6 +163,21 @@ function addComment() {
                 </div>
             </div>
         </div>`;
+}
+
+// Clears the Post Insert's fields
+function clearPostInsert() {
+    document.getElementById("post-title").value = '';
+    document.getElementById("post-text").value = '';
+    document.getElementById("post-image").value = '';
+}
+
+// Adds a post to the website
+function addPostInsert() {
+    addPost(document.getElementById("post-title").value,
+        document.getElementById("post-text").value, imgStore);
+
+    loadData();
 }
 
 // Sort the posts contained on the fakeDB by Date
@@ -209,6 +225,23 @@ function updatePost(post) {
 // Finds a Post
 function findPost(id) {
     return db.find(item => item.id == id);
+}
+
+// Adds a Post
+function addPost(title, text, img) {
+    let date = new Date();
+
+    db.push({
+        "id": Math.random() * 1000000000,
+        "date": date.toISOString(),
+        "title": title,
+        "text": text,
+        "image": img,
+        "likes": 0,
+        "comments": [],
+    });
+
+    localStorage.setItem("dbPedroHenriqueAlmeidaCosta", JSON.stringify(db));
 }
 
 
